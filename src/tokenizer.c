@@ -119,7 +119,7 @@ void print_tokens(char **tokens){
 void free_tokens(char **tokens){
   int i = 0;
   while(*(tokens + i)){
-    printf("Deleating tokens[%d] = %s\n", i, *(tokens + i));
+    // printf("Deleating tokens[%d] = %s\n", i, *(tokens + i));
     free(*(tokens + i));
     i++;
   }
