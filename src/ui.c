@@ -3,34 +3,73 @@
 #include "history.h"
 #include <stdlib.h>
 
-void getInput(){
+char *getInput(){
 
-  int c;
-
+  char c;
+  char *str = (char*)malloc(sizeof(char));
+  int i = 0;
+  
   printf(">");
-    while((c = getchar()) != EOF && c != '\n' ){
-    putchar(c);
+  while((c = getchar()) != EOF && c != '\n'){
+    *(str + i) = c;
+    i++;
   }
-  printf("\n");
-  
-  
+
+  return str;
 }
 
 int main(void){
-  char string[] = "Hello my name is Marco";
-  char **tokens = tokenize(string);
-  free_tokens(tokens);
+  printf("Welcome to TOKENIZE! Select one of the following options\n");
 
-  List *new_list = init_history();
+  char *string;
+  char **tokens;
+  List *history = init_history();
+  while(1){
+    printf("'1' = tokenize | '2' = print tokens | '3' = delete tokens\n");
+    printf("'4' = print history | '!3' recall history item | 'q' = exit the program\n");
+    printf("\n");
+    
+    string = getInput();
+    //printf("%s\n", string);
 
-  add_history(new_list, "Hello");
-  add_history(new_list, "Goodbye");
-  add_history(new_list, "Hola");
-  print_history(new_list);
+    if(*string == 'q'){
+      printf("Thank you for using this program!\n");
+      break;
+    }
+    
+    switch(*string)
+    {
+    case '1':
+      printf("You chose to 'tokenize'! Please enter the String you would like to tokenize:\n");
+      string = getInput();
+      tokens = tokenize(string);
+      add_history(history, string);
+      break;
 
-  char *ptr = get_history(new_list, 1);
-  printf("This is the string: %s\n", ptr);
+    case '2':
+      printf("You chose to 'print tokens'\n");
+      print_tokens(tokens);
+      break;
 
-  free_history(new_list);
-  print_history(new_list);
+    case '3':
+      printf("You chose to 'delete tokens\n'");
+      free_tokens(tokens);
+      break;
+
+    case '4':
+      printf("You chose to 'print history'\n");
+      print_history(history);
+      break;
+
+    case '5':
+      printf("You chose to 'retrieve item from history'\n");
+      printf("please enter the element id:\n");
+      printf(">");
+      
+      int id; 
+      scanf("%d", &id);
+      tokens = tokenize(get_history(history, id));
+      break;
+    }
+  }
 }
